@@ -15,6 +15,7 @@
 # Story script by https://www.instagram.com/caz.arteel/
 
 import pygame
+from pygame.locals import *
 from sys import exit
 
 # ---- general properties ----
@@ -22,17 +23,164 @@ from sys import exit
 SCREEN_WIDTH = 852
 SCREEN_HEIGHT = 480
 
+# variables to be used through the program
 
-# initiating 
+vec = pygame.math.Vector2
+ACC = 0.3
+FRIC = -0.10
+FPS = 60
+FPS_CLOCK = pygame.time.Clock()
+
+ENLARGE = 8
+
+# ---- character selection ----
+characters = {1: "Caz",
+              2: "Gabriel",
+              3: "Nina",
+              4: "Roberto",
+              5: "Senne"}
+
+iteration = 0
+for character in characters.values():
+    iteration += 1
+    print(f"{iteration}. {character}")
+
+print("You can choose by typing the character name or the number")
+chosen_character = input("Choose you character: ")
+
+try:
+    if int(chosen_character) in characters.keys():
+        chosen_character = characters[int(chosen_character)].lower()
+except ValueError:
+    if chosen_character.capitalize() in characters.values():
+        chosen_character.lower()
+except:
+    print("You have to choose a character, that was not a character")
+
+# ---- initiating ----
 pygame.init()
 
 # windows properties
-# pygame.display.set_icon(pygame.image.load("logo.png"))
-pygame.display.set_caption("Five nights at Senne")
+pygame.display.set_icon(pygame.image.load("src/logo.png"))
+pygame.display.set_caption("Five nights at Senne", "Five nights at Senne")
 screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT), flags=pygame.RESIZABLE)
 screen.fill((255, 248, 220))
 
-# game state
+# ---- classes ----
+class Background(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()      
+        self.bgimage = pygame.image.load("src/background.png")
+
+        self.bgX = 0
+        self.bgY = 0
+    
+    def render(self):
+        screen.blit(self.bgimage, (self.bgX, self.bgY))
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load(f"src/{chosen_character}.png").convert_alpha()  # loading the image and giving it an alpha layer
+        self.size = self.image.get_size()  # getting image size
+
+        self.image = pygame.transform.scale(self.image, (int(self.size[0] * ENLARGE), int(self.size[1] * ENLARGE)))  # scaling the image
+
+        self.rect = self.image.get_rect()  # giving player a hitbox
+ 
+        # position and direction
+        self.pos = vec((340, 240))  # position
+        self.vel = vec(0,0)  # velocity
+        self.acc = vec(0,0)  # acceleration
+        self.direction = "RIGHT"  # where the character is facing
+
+    def move(self):
+        # sets player movement to zero
+        def set_zero():
+            self.acc.x = 0
+            self.acc.y = 0
+
+        if abs(self.vel.x) > 0.3:
+            self.running = True
+        else:
+            self.running = False
+
+        # Returns the current key presses
+        pressed_keys = pygame.key.get_pressed()
+        
+        # ---- movement ----
+        # keypresses
+        left_axis = pressed_keys[K_LEFT] or pressed_keys[K_a] or pressed_keys[K_q] or pressed_keys[CONTROLLER_BUTTON_DPAD_LEFT]
+        right_axis = pressed_keys[K_RIGHT] or pressed_keys[K_d] or pressed_keys[CONTROLLER_BUTTON_DPAD_RIGHT]
+
+        up_axis = pressed_keys[K_UP] or pressed_keys[K_w] or pressed_keys[K_z] or pressed_keys[CONTROLLER_BUTTON_DPAD_UP]
+        down_axis = pressed_keys[K_DOWN] or pressed_keys[K_s] or pressed_keys[CONTROLLER_BUTTON_DPAD_DOWN]
+
+        # combination
+        if left_axis and up_axis:
+            self.acc.x = -ACC
+            self.acc.y = -ACC
+
+        elif right_axis and up_axis:
+            self.acc.x = ACC
+            self.acc.y = -ACC
+        elif left_axis and down_axis:
+            self.acc.x = -ACC
+            self.acc.y = ACC
+        elif right_axis and down_axis:
+            self.acc.x = ACC
+            self.acc.y = ACC
+
+        # x axis
+        elif left_axis:
+            self.acc.x = -ACC
+        elif right_axis:
+            self.acc.x = ACC
+
+        # y axis
+        elif up_axis:
+            self.acc.y = -ACC
+        elif down_axis:
+            self.acc.y = ACC
+
+        else:
+            set_zero()
+
+        # physics
+        self.acc.x += self.vel.x * FRIC
+        self.acc.y += self.vel.y * FRIC
+        self.vel += self.acc
+        self.pos += self.vel + 0.5 * self.acc
+    
+        # warping player
+        if self.pos.x > SCREEN_WIDTH:
+                self.pos.x = 0
+        if self.pos.x < 0:
+                self.pos.x = SCREEN_WIDTH
+        if self.pos.y > SCREEN_HEIGHT:
+                self.pos.y = 0
+        if self.pos.y < 0:
+                self.pos.y = SCREEN_HEIGHT
+        
+        self.rect.midbottom = self.pos  # Update rect with new pos
+
+    def update(self):
+        pass
+    
+    def attack(self):
+        pass
+    
+    def jump(self):
+        pass
+
+
+
+
+# creating the objects
+background = Background()
+player = Player()
+
+# ---- game state ----
 game_over = False
 
 # ---- game loop ----
@@ -44,20 +192,35 @@ while not game_over:
             # change the value to False, to exit the main loop
             running = False
 
+
         # resize window
         if event.type == pygame.VIDEORESIZE:
                 # There's some code to add back window content here.
                 surface = pygame.display.set_mode((event.w, event.h),
-                                                pygame.RESIZABLE)
-        
+                                                   pygame.RESIZABLE)
+
+                # changing dimensions of game area when resizing window
+                SCREEN_HEIGHT = event.h
+                SCREEN_WIDTH = event.w
+
         # making the program exitable
         if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+        # For events that occur upon clicking the mouse (left click) 
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pass
+ 
+        # Event handling for a range of different key presses    
+        if event.type == pygame.KEYDOWN:
+            pass
+
+    # ---- rendering ----
+    background.render()
+    player.move()
+
+    screen.blit(player.image, player.rect)
     
-
-
-
-
     pygame.display.update()
     
