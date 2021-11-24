@@ -112,9 +112,6 @@ class Player(pygame.sprite.Sprite):
         up_axis = pressed_keys[K_UP] or pressed_keys[K_w] or pressed_keys[K_z] or pressed_keys[CONTROLLER_BUTTON_DPAD_UP]
         down_axis = pressed_keys[K_DOWN] or pressed_keys[K_s] or pressed_keys[CONTROLLER_BUTTON_DPAD_DOWN]
 
-        # setting the acceleration to 0 so it's limeited
-        # self.acc = vec(0, 0)
-
         self.acc = vec(int(right_axis) - int(left_axis),
                        int(down_axis) - int(up_axis))
 
