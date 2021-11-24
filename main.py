@@ -28,7 +28,7 @@ SCREEN_HEIGHT = 480
 # variables to be used through the program
 
 vec = pygame.math.Vector2
-FRIC = 0.1
+FRIC = 0.20
 FPS = 60
 FPS_CLOCK = pygame.time.Clock()
 
