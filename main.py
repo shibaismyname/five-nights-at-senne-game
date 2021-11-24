@@ -17,7 +17,10 @@
 import pygame
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 from pygame.locals import K_w, K_a, K_s, K_d, K_q, K_z
-from pygame.locals import CONTROLLER_BUTTON_DPAD_LEFT, CONTROLLER_BUTTON_DPAD_RIGHT, CONTROLLER_BUTTON_DPAD_UP, CONTROLLER_BUTTON_DPAD_DOWN
+from pygame.locals import (CONTROLLER_BUTTON_DPAD_LEFT,
+                           CONTROLLER_BUTTON_DPAD_RIGHT,
+                           CONTROLLER_BUTTON_DPAD_UP,
+                           CONTROLLER_BUTTON_DPAD_DOWN)
 from sys import exit
 
 # ---- general properties ----
@@ -106,11 +109,23 @@ class Player(pygame.sprite.Sprite):
 
         # ---- movement ----
         # keypresses
-        left_axis = pressed_keys[K_LEFT] or pressed_keys[K_a] or pressed_keys[K_q] or pressed_keys[CONTROLLER_BUTTON_DPAD_LEFT]
-        right_axis = pressed_keys[K_RIGHT] or pressed_keys[K_d] or pressed_keys[CONTROLLER_BUTTON_DPAD_RIGHT]
+        left_axis = (pressed_keys[K_LEFT]
+                     or pressed_keys[K_a]
+                     or pressed_keys[K_q]
+                     or pressed_keys[CONTROLLER_BUTTON_DPAD_LEFT])
 
-        up_axis = pressed_keys[K_UP] or pressed_keys[K_w] or pressed_keys[K_z] or pressed_keys[CONTROLLER_BUTTON_DPAD_UP]
-        down_axis = pressed_keys[K_DOWN] or pressed_keys[K_s] or pressed_keys[CONTROLLER_BUTTON_DPAD_DOWN]
+        right_axis = (pressed_keys[K_RIGHT]
+                      or pressed_keys[K_d]
+                      or pressed_keys[CONTROLLER_BUTTON_DPAD_RIGHT])
+
+        up_axis = (pressed_keys[K_UP]
+                   or pressed_keys[K_w]
+                   or pressed_keys[K_z]
+                   or pressed_keys[CONTROLLER_BUTTON_DPAD_UP])
+
+        down_axis = (pressed_keys[K_DOWN]
+                     or pressed_keys[K_s]
+                     or pressed_keys[CONTROLLER_BUTTON_DPAD_DOWN])
 
         self.acc = vec(int(right_axis) - int(left_axis),
                        int(down_axis) - int(up_axis))
