@@ -14,6 +14,7 @@
 # Sound design & music by https://www.instagram.com/nina.casteleyn/
 # Story script by https://www.instagram.com/caz.arteel/
 
+import sys
 import pygame
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 from pygame.locals import K_w, K_a, K_s, K_d, K_q, K_z
@@ -21,7 +22,6 @@ from pygame.locals import (CONTROLLER_BUTTON_DPAD_LEFT,
                            CONTROLLER_BUTTON_DPAD_RIGHT,
                            CONTROLLER_BUTTON_DPAD_UP,
                            CONTROLLER_BUTTON_DPAD_DOWN)
-import sys
 
 # ---- general properties ----
 # screen propertiees
