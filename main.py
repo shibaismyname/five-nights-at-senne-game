@@ -21,7 +21,7 @@ from pygame.locals import (CONTROLLER_BUTTON_DPAD_LEFT,
                            CONTROLLER_BUTTON_DPAD_RIGHT,
                            CONTROLLER_BUTTON_DPAD_UP,
                            CONTROLLER_BUTTON_DPAD_DOWN)
-from sys import exit
+import sys
 
 # ---- general properties ----
 # screen propertiees
@@ -187,7 +187,7 @@ while not game_over:
         # making the program exitable
         if event.type == pygame.QUIT:
             pygame.quit()
-            exit()
+            sys.exit()
 
         # For events that occur upon clicking the mouse (left click)
         if event.type == pygame.MOUSEBUTTONDOWN:
