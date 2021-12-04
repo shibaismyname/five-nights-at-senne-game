@@ -11,8 +11,8 @@
 # ▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█
 # Coded by Shiba https://shiba.house
 # Artwork by https://www.instagram.com/gabriel_bastens/
-# Sound design & music by https://www.instagram.com/nina.casteleyn/
-# Story script by https://www.instagram.com/caz.arteel/
+# Sound design & music by https://www.instagram.com/caz.arteel/
+# Story script by https://www.instagram.com/nina.casteleyn/
 
 import sys
 import pygame
